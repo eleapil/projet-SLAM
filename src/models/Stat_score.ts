@@ -39,4 +39,26 @@ export class Stat {
   get guess(): string {
     return this._guess;
   }
+
+  toJSON() {
+    return {
+      id: this._id,
+      users_id: this._users_id,
+      tentatives: this._tentatives,
+      duree: this._duree,
+      is_win: this._is_win,
+      guess: this._guess,
+    };
+  }
+
+  static fromRow(row: Record<string, unknown>): Stat {
+    return new Stat(
+      row.id as number,
+      row.users_id as number,
+      row.tentatives as number,
+      row.duree as number,
+      row.is_win as boolean,
+      row.guess as string,
+    );
+  }
 }
