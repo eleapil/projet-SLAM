@@ -45,7 +45,7 @@ router.get("/api/stats/:users_id", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/api/stats/:users_id", async (req: Request, res: Response) => {
+router.get("/:users_id/highscore", async (req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
@@ -67,17 +67,24 @@ router.get("/api/stats/:users_id", async (req: Request, res: Response) => {
   }
 });
 
-router.post("//api/stats/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   let conn;
-  conn = await pool.getConnection();
-  const { tentatives, duree, is_win, guess, resultat } = req.body;
+  try {
+    conn = await pool.getConnection();
+    const { tentatives, duree, is_win, guess, resultat } = req.body;
 
-  await conn.query(
-    `INSERT INTO stats_score( tentatives, duree, is_win, guess, resultat,
-    VALUES (?,?,?,?,?)`,
-    [tentatives, duree, is_win, guess, resultat]
-  );
-  res.status(201).json({"Nouvelle stat"})
+    await conn.query(
+      `INSERT INTO stats_score( tentatives, duree, is_win, guess, resultat)
+      VALUES (?,?,?,?,?)`,
+      [tentatives, duree, is_win, guess, resultat]
+    );
+    res.status(201).json({"Nouvelle stat"})
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Erreur serveur" });
+  } finally {
+      if (conn) conn.release();
+  }
 });
 
 export default router;
