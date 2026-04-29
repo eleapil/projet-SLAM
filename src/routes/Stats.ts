@@ -10,9 +10,7 @@ router.get("/", async (_req: Request, res: Response) => {
   try {
     conn = await pool.getConnection();
     const rows = await conn.query("SELECT * FROM stats_score");
-    const stats = rows.map((row: Record<string, unknown>) =>
-      Stat.fromRow(row).toJSON(),
-    );
+    const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
     res.json(stats);
   } catch (err) {
     console.error(err);
@@ -22,21 +20,18 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-// GET /api/stats/:users_id -- Un score par son users_id
-router.get("/api/stats/:users_id", async (req: Request, res: Response) => {
+// GET /api/stats/:users_id -- les scores par son users_id
+
+router.get("/:users_id", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const rows = await conn.query(
       "SELECT * FROM stats_score WHERE users_id = ?",
-      [req.params.users_id],
     );
-    if (rows.length === 0) {
-      res.status(404).json({ error: "Stat introuvable" });
-      return;
-    }
-    const stat = Stat.fromRow(rows[0]);
-    res.json(stat.toJSON());
+    [_req.params.users_id];
+    const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
+    res.json(stats);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
@@ -45,20 +40,16 @@ router.get("/api/stats/:users_id", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:users_id/highscore", async (req: Request, res: Response) => {
+router.get("/:users_id/high", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const rows = await conn.query(
       "SELECT * FROM stats_score WHERE users_id = ? ORDER BY resultat DESC",
-      [req.params.users_id],
     );
-    if (rows.length === 0) {
-      res.status(404).json({ error: "Stat introuvable" });
-      return;
-    }
-    const stat = Stat.fromRow(rows[0]);
-    res.json(stat.toJSON());
+    [_req.params.users_id];
+    const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
+    res.json(stats);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
@@ -76,14 +67,14 @@ router.post("/", async (req: Request, res: Response) => {
     await conn.query(
       `INSERT INTO stats_score( tentatives, duree, is_win, guess, resultat)
       VALUES (?,?,?,?,?)`,
-      [tentatives, duree, is_win, guess, resultat]
+      [tentatives, duree, is_win, guess, resultat],
     );
-    res.status(201).json({"Nouvelle stat"})
+    res.status(201).json({ message: "Nouvelle stat" });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Erreur serveur" });
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
   } finally {
-      if (conn) conn.release();
+    if (conn) conn.release();
   }
 });
 
