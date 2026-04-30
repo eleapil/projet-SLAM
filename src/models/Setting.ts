@@ -18,14 +18,14 @@ export class Setting {
     return this.theme;
   }
 
-  tiJSON() {
+  toJSON() {
     return {
       id: this._id,
       users_id: this._users_id,
       theme: this._theme,
     };
   }
-  static gromRow(row: Record<string, unknown>): Setting {
+  static fromRow(row: Record<string, unknown>): Setting {
     return new Setting(
       row.id as number,
       row.users_id as number,
