@@ -1,4 +1,10 @@
-export default function Connection() {
+interface ConnectionProps {
+  setIsConnection: (bool) => void;
+}
+
+export default function Connection({
+  setIsConnection
+}: ConnectionProps) {
   return (
     <>
       {/*
@@ -9,7 +15,7 @@ export default function Connection() {
         <body class="h-full">
         ```
       */}
-      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 palette-bg-gris">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in to your account</h2>
         </div>
@@ -59,7 +65,7 @@ export default function Connection() {
               </button>
             </div>
           </form>
-            <a href="# " className="font-semibold text-indigo-400 hover:text-indigo-300">
+            <a href="#" onClick={() => setIsConnection(false) } className="font-semibold text-indigo-400 hover:text-indigo-300">
               Pas de compte ?
             </a>
         </div>

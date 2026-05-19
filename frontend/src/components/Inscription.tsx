@@ -1,4 +1,47 @@
-export default function Inscription() {
+import { useState } from "react";
+
+
+const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  // 2. Fonction qui gère la soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Évite le rechargement de la page
+
+    try {
+      // Remplacer l'URL par celle de ton API Express
+      const response = await fetch('http://localhost:5000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }), // On envoie les données en JSON
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage(`Succès : ${data.message}`);
+        // Optionnel : vider les champs du formulaire
+        setEmail('');
+        setPassword('');
+      } else {
+        setMessage(`Erreur : ${data.message || 'Une erreur est survenue'}`);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête:", error);
+      setMessage("Impossible de contacter le serveur.");
+    }
+  };
+
+
+
+interface ConnectionProps {
+  setIsConnection: (bool) => void;
+}
+
+export default function Inscription({setIsConnection}: ConnectionProps) {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -10,12 +53,26 @@ export default function Inscription() {
           <form action="#" method="POST" className="space-y-6">
             <div>
               <label htmlFor="nom" className="block text-sm/6 font-medium text-black">
-                nom
+                Nom
               </label>
               <div className="mt-2">
                 <input
                   id="nom"
                   name="nom"
+                  type="text"
+                  required
+                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="prenom" className="block text-sm/6 font-medium text-black">
+                Prénom
+              </label>
+              <div className="mt-2">
+                <input
+                  id="prenom"
+                  name="prenom"
                   type="text"
                   required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
@@ -37,7 +94,20 @@ export default function Inscription() {
                 />
               </div>
             </div>
-
+<div>
+              <label htmlFor="pseudo" className="block text-sm/6 font-medium text-black">
+                Pseudo
+              </label>
+              <div className="mt-2">
+                <input
+                  id="pseudo"
+                  name="pseudo"
+                  type="text"
+                  required
+                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                />
+              </div>
+            </div>
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="block text-sm/6 font-medium text-black">
@@ -65,7 +135,7 @@ export default function Inscription() {
               </button>
             </div>
           </form>
-            <a href="# " className="font-semibold text-indigo-400 hover:text-indigo-300">
+            <a href="# " onClick={() => setIsConnection(true) } className="font-semibold text-indigo-400 hover:text-indigo-300">
               Déjà un compte ?
             </a>
         </div>

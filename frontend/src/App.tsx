@@ -1,13 +1,12 @@
-import Connection from "./components/Connection"
-import Inscription from "./components/Inscription"
 
+import Afficher from "./components/AfficherConnectInscr"
 function App() {
-  return (
-    <div>
-      {/* <Connection/> */}
-      <Inscription/>
-    </div>
-  )
+  return(
+      <>
+       <Afficher/>
+      </>
+      )
 }
+
 
 export default App;
