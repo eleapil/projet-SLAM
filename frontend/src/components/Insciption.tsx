@@ -1,56 +1,60 @@
 import { useState } from "react";
 
+interface ConnectionProps {
+  setIsConnection: (bool: boolean) => void;
+}
 
-const [email, setEmail] = useState('');
+export default function Inscription({ setIsConnection }: ConnectionProps) {
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [email, setEmail] = useState('');
+  const [pseudo, setPseudo] = useState("");
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
 
-  // 2. Fonction qui gère la soumission du formulaire
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Évite le rechargement de la page
+  // soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     try {
-      // Remplacer l'URL par celle de ton API Express
-      const response = await fetch('http://localhost:5000/api/register', {
+      const response = await fetch('http://localhost:3000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }), // On envoie les données en JSON
+        
+        body: JSON.stringify({ nom, prenom, email, pseudo, mdp: password }), 
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(`Succès : ${data.message}`);
-        // Optionnel : vider les champs du formulaire
+        alert("Inscription validée !");
+        
         setEmail('');
         setPassword('');
+        setNom('');
+        setPrenom('');
+        setPseudo('');
+        
+        setIsConnection(true);
       } else {
-        setMessage(`Erreur : ${data.message || 'Une erreur est survenue'}`);
+        console.error('Une erreur est survenue :', data.error);
       }
     } catch (error) {
-      console.error("Erreur lors de la requête:", error);
-      setMessage("Impossible de contacter le serveur.");
+      console.error("Erreur lors de la requête :", error);
     }
   };
 
-
-
-interface ConnectionProps {
-  setIsConnection: (bool) => void;
-}
-
-export default function Inscription({setIsConnection}: ConnectionProps) {
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in to your account</h2>
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Créer un compte</h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          {}
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="nom" className="block text-sm/6 font-medium text-black">
                 Nom
@@ -60,6 +64,8 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
                   id="nom"
                   name="nom"
                   type="text"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
                   required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
@@ -74,6 +80,8 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
                   id="prenom"
                   name="prenom"
                   type="text"
+                  value={prenom}
+                  onChange={(e) => setPrenom(e.target.value)}
                   required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
@@ -88,13 +96,15 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
                   id="email"
                   name="email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
               </div>
             </div>
-<div>
+            <div>
               <label htmlFor="pseudo" className="block text-sm/6 font-medium text-black">
                 Pseudo
               </label>
@@ -103,6 +113,8 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
                   id="pseudo"
                   name="pseudo"
                   type="text"
+                  value={pseudo}
+                  onChange={(e) => setPseudo(e.target.value)}
                   required
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-black outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
                 />
@@ -119,6 +131,8 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
@@ -129,17 +143,19 @@ export default function Inscription({setIsConnection}: ConnectionProps) {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-              >
+                className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                 S'inscrire
               </button>
             </div>
           </form>
-            <a href="# " onClick={() => setIsConnection(true) } className="font-semibold text-indigo-400 hover:text-indigo-300">
+          
+          <div className="mt-4 text-center">
+            <a href="#" onClick={() => setIsConnection(true)} className="font-semibold text-indigo-400 hover:text-indigo-300">
               Déjà un compte ?
             </a>
+          </div>
         </div>
       </div>
     </>
-  )
+  );
 }
