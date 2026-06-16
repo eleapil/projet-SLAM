@@ -1,0 +1,53 @@
+.clavier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ligneClav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.lettre {
+  width: 50px;
+  height: 50px;
+  background: lightgray;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.lettre:hover {
+  background-color: gray;
+}
+
+.supp {
+  width: 100px;
+  background: rgb(245, 47, 47);
+}
+
+.entre {
+  width: 100px;
+  background: rgb(22, 208, 22);
+}
+
+.lettre.juste {
+  background-color: #538d4e;
+}
+
+.lettre.mvPlacement {
+  background-color: #b59f3b;
+}
+
+.lettre.absent {
+  background-color: #55555b;
+}
