@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+.palette-gris {
+    color: #c2c1c2;
+}
+.palette-bg-gris {
+    background-color: #c2c1c2;
+}
+
+.palette-prune {
+color: #42213d;
+}
+.palette-violet {
+    color: #683257;
+}
+.palette-rose {
+    color: #BD4089;
+}
