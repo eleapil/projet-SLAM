@@ -1,0 +1,74 @@
+/* Conteneur global */
+.ligne {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin: 24px 0;
+}
+
+/* Chaque ligne */
+.colonne {
+  display: flex;
+  gap: 6px;
+}
+
+/* Cases */
+.case {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #55555b;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+
+  text-align: center;
+  text-transform: uppercase;
+
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 56px;
+
+  outline: none;
+  caret-color: transparent; /* cache le curseur */
+
+  transition: all 0.2s ease;
+}
+
+/* Effet focus (quand tu écris) */
+.case:focus {
+  border-color: #565758;
+}
+
+/* Variante Wordle (si tu veux plus tard ajouter les couleurs) */
+.juste {
+  background-color: #538d4e;
+  border-color: #538d4e;
+  color: white;
+}
+
+.mvPlacement {
+  background-color: #b59f3b;
+  border-color: #b59f3b;
+  color: white;
+}
+
+.absent {
+  background-color: #55555b;
+  border-color: #55555b;
+  color: white;
+}
+
+/* Responsive (mobile) */
+@media (max-width: 500px) {
+  .case {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    line-height: 44px;
+  }
+}
+
+.case.erreur {
+  background-color: red;
+  color: white;
+}

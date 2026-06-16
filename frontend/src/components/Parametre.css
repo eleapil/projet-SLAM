@@ -1,0 +1,68 @@
+.pannel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.titre {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.boutonAzerty,
+.boutonQwerty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #e5e7eb;
+  color: #111;
+
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+
+  cursor: pointer;
+  transition: 0.2s;
+  margin: 8px;
+}
+
+.boutonAzerty:hover,
+.boutonQwerty:hover {
+  background-color: #d1d5db;
+}
+
+.boutonFermer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #bf0000;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+
+  cursor: pointer;
+  transition: 0.2s;
+  margin: 8px;
+}
+
+.boutonFermer:hover {
+  background-color: #850000;
+}
