@@ -97,6 +97,8 @@ export default function Grille({ langueClavier }: any) {
           }
           return ligneSuivante;
         });
+
+        setColonneActive(0);
       }
     }
   };
@@ -191,8 +193,13 @@ export default function Grille({ langueClavier }: any) {
     const response = await fetch(
       `https://api.wordnik.com/v4/words.json/randomWords?limit=1&minLength=5&maxLength=5&api_key=${keywordnik}`,
     );
-    const mot = await response.json();
-    return mot[0].word.toUpperCase();
+    const data = await response.json();
+    const mot = data[0].word.toUpperCase();
+
+    if (mot.includes("'") || mot.includes("-") || mot.includes("ö")) {
+      return motSecret();
+    }
+    return mot;
   }
 
   const [secret, setSecret] = useState("");
