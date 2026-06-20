@@ -1,3 +1,19 @@
+:root,
+body.light {
+  --case-bg: #ffffff;
+  --case-text: #000000;
+  --case-border: #55555b;
+  --case-border-focus: #565758;
+}
+
+body.dark {
+  --case-bg: #ffffff;
+  --case-text: #000000;
+  --case-border: #4b5563;
+  --case-border-focus: #818cf8;
+  background-color: #18233b;
+}
+
 /* Conteneur global */
 .ligne {
   display: flex;
@@ -17,9 +33,9 @@
 .case {
   width: 56px;
   height: 56px;
-  border: 2px solid #55555b;
-  background-color: #ffffff;
-  color: rgb(0, 0, 0);
+  border: 2px solid var(--case-border);
+  background-color: var(--case-bg);
+  color: var(--case-text);
 
   text-align: center;
   text-transform: uppercase;
@@ -32,11 +48,12 @@
   caret-color: transparent; /* cache le curseur */
 
   transition: all 0.2s ease;
+  border-radius: 5px;
 }
 
 /* Effet focus (quand tu écris) */
 .case:focus {
-  border-color: #565758;
+  border-color: var(--case-border-focus);
 }
 
 /* Variante Wordle (si tu veux plus tard ajouter les couleurs) */

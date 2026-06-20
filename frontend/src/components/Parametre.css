@@ -4,65 +4,139 @@
   left: 50%;
   transform: translate(-50%, -50%);
 
-  background-color: white;
-  border-radius: 16px;
+  background-color: #ffffff;
+  border-radius: 20px;
   padding: 24px;
-  width: 100%;
-  max-width: 500px;
+  width: 320px;
+  height: 350px;
   text-align: center;
 
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+
+  animation: pannel-in 0.18s ease-out;
+}
+
+@keyframes pannel-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.section {
+  margin-bottom: 20px;
 }
 
 .titre {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: black;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.groupeBoutons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
 }
 
 .boutonAzerty,
-.boutonQwerty {
+.boutonQwerty,
+.boutonLight,
+.boutonDark {
+  flex: 1 1 0;
+  min-width: 0;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  margin: 10px;
 
-  background-color: #e5e7eb;
-  color: #111;
+  background-color: #f3f4f6;
+  color: #374151;
 
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 1rem;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 12px 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
 
   cursor: pointer;
-  transition: 0.2s;
-  margin: 8px;
+  transition: all 0.15s ease;
 }
 
 .boutonAzerty:hover,
-.boutonQwerty:hover {
-  background-color: #d1d5db;
+.boutonQwerty:hover,
+.boutonLight:hover,
+.boutonDark:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.boutonAzerty:active,
+.boutonQwerty:active,
+.boutonLight:active,
+.boutonDark:active {
+  transform: translateY(0);
+}
+
+.boutonAzerty.actif,
+.boutonQwerty.actif {
+  background-color: #eef2ff;
+  border-color: #6366f1;
+  color: #4338ca;
+}
+
+.boutonLight.actif {
+  background-color: #f59f0b;
+  border-color: #f59e0b;
+  color: white;
+}
+
+.boutonDark.actif {
+  background-color: #1f2937;
+  border-color: #1f2937;
+  color: white;
+}
+
+.separateur {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 18px 0 16px;
 }
 
 .boutonFermer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 30px;
 
-  background-color: #bf0000;
-  color: white;
+  background-color: #fef2f2;
+  color: #dc2626;
 
   border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 1rem;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
 
   cursor: pointer;
-  transition: 0.2s;
-  margin: 8px;
+  transition: all 0.15s ease;
 }
 
 .boutonFermer:hover {
-  background-color: #850000;
+  background-color: #fee2e2;
 }

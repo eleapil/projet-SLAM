@@ -7,7 +7,14 @@ import {
 import "./Parametre.css";
 
 //modal pour faire un pop up de paramètres
-export default function Parametre({ open, setOpen, setLangueClavier }: any) {
+export default function Parametre({
+  open,
+  setOpen,
+  setLangueClavier,
+  setTheme,
+  langueClavier,
+  theme,
+}: any) {
   return (
     <Dialog
       open={open}
@@ -25,7 +32,7 @@ export default function Parametre({ open, setOpen, setLangueClavier }: any) {
               setOpen(false);
               setLangueClavier("azerty");
             }}
-            className="boutonAzerty"
+            className={`boutonAzerty ${langueClavier === "azerty" ? "actif" : ""}`}
           >
             AZERTY
           </button>
@@ -34,7 +41,7 @@ export default function Parametre({ open, setOpen, setLangueClavier }: any) {
               setOpen(false);
               setLangueClavier("qwerty");
             }}
-            className="boutonQwerty"
+            className={`boutonQwerty ${langueClavier === "qwerty" ? "actif" : ""}`}
           >
             QWERTY
           </button>
@@ -42,22 +49,24 @@ export default function Parametre({ open, setOpen, setLangueClavier }: any) {
           <button
             onClick={() => {
               setOpen(false);
+              setTheme("light");
             }}
-            className="boutonQwerty"
+            className={`boutonLight ${theme === "light" ? "actif" : ""}`}
           >
-            CLAIR
+            ☼ CLAIR
           </button>
           <button
             onClick={() => {
               setOpen(false);
+              setTheme("dark");
             }}
-            className="boutonQwerty"
+            className={`boutonDark ${theme === "dark" ? "actif" : ""}`}
           >
-            SOMBRE
+            ☾ SOMBRE
           </button>
           <br />
           <button onClick={() => setOpen(false)} className="boutonFermer">
-            ✖ Fermer
+            X Fermer
           </button>
         </DialogPanel>
       </div>
