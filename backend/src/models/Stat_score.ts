@@ -5,6 +5,7 @@ export class Stat {
   private _duree: number;
   private _is_win: boolean;
   private _guess: string;
+  private _resultat : number;
 
   constructor(
     id: number,
@@ -13,6 +14,7 @@ export class Stat {
     duree: number,
     is_win: boolean,
     guess: string,
+    resultat : number,
   ) {
     this._id = id;
     this._users_id = users_id;
@@ -20,6 +22,7 @@ export class Stat {
     this._duree = duree;
     this._is_win = is_win;
     this._guess = guess;
+    this._resultat = resultat;
   }
   get id(): number {
     return this._id;
@@ -39,6 +42,9 @@ export class Stat {
   get guess(): string {
     return this._guess;
   }
+  get resultat(): number {
+    return this._resultat;
+  }
 
   toJSON() {
     return {
@@ -48,6 +54,7 @@ export class Stat {
       duree: this._duree,
       is_win: this._is_win,
       guess: this._guess,
+      resultat: this._resultat,
     };
   }
 
@@ -59,6 +66,7 @@ export class Stat {
       row.duree as number,
       row.is_win as boolean,
       row.guess as string,
+      row.resultat as number,
     );
   }
 }

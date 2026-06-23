@@ -3,7 +3,7 @@ import { useState } from "react";
 import Jeu from "./components/Jeu";
 import Afficher from "./components/AfficherConnectInscr"
 import StatsScore from "./components/Scoreboard";
-
+import StatsScorePerso from "./components/ScorePerso";
 function App() {
 const [isConnected, setIsConnected] = useState(() => {
     return localStorage.getItem("user") !== null; // Renvoie true s'il y a un user, sinon false
@@ -15,6 +15,7 @@ const [isConnected, setIsConnected] = useState(() => {
       <>
       <Jeu />
       <StatsScore/>
+      <StatsScorePerso/>
       </>
       )
     } else {
