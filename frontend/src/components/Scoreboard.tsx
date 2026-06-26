@@ -19,7 +19,7 @@ import { useState, useEffect } from "react";
 // 1. Définir la structure d'une ligne de statistique (adapte selon tes colonnes de BDD)
 interface StatScore {
   id: number;
-  users_id: number;
+  pseudo: string;
   resultat: number;
   tentatives: number;
   duree : number;
@@ -85,7 +85,7 @@ export default function StatsScore() {
           <table className="min-w-full table-auto border-collapse border border-gray-700 text-left text-sm">
             <thead className="bg-gray-800 text-indigo-300 uppercase text-xs tracking-wider">
               <tr>
-                <th className="p-3 border-b border-gray-700">ID Joueur</th>
+                <th className="p-3 border-b border-gray-700">Joueur</th>
                 <th className="p-3 border-b border-gray-700">Mot</th>
                 <th className="p-3 border-b border-gray-700">tentative</th>
                 <th className="p-3 border-b border-gray-700">durée</th>
@@ -95,7 +95,7 @@ export default function StatsScore() {
             <tbody className="divide-y divide-gray-800">
               {stats.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.users_id}</td>
+                  <td className="p-3 border-b border-gray-800 font-medium text-indigo-200">{item.pseudo}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.guess}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.tentatives}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.duree}</td>
