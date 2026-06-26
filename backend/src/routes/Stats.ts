@@ -46,13 +46,9 @@ router.get("/high", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
-<<<<<<< HEAD
+    
     const rows = await conn.query("SELECT * FROM stats_score ORDER BY resultat DESC");
-=======
-    const rows = await conn.query(
-      "SELECT * FROM stats_score ORDER BY resultat DESC",
-    );
->>>>>>> main
+
     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
     res.json(stats);
   } catch (err) {
