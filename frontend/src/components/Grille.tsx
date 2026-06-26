@@ -17,6 +17,11 @@ export default function Grille({ langueClavier }: any) {
   const [colonneActive, setColonneActive] = useState(0);
   const [presence, setPresence] = useState({}); //juste, mvPlacement absent
 
+  //states pour timer du jeu
+  const [depart, setDepart] = useState(null);
+  const [fin, setFin] = useState(null);
+  const [depChrono, setDepChrono] = useState(false);
+
   const setRef = (ligne: number, col: number) => (el: any) => {
     const key = `${ligne}-${col}`;
     if (el) inputsRef.current.set(key, el);
@@ -34,6 +39,11 @@ export default function Grille({ langueClavier }: any) {
     //pouvoir écrire que lettres et pas symboles
     if (!/^[A-Z]$/.test(value)) {
       value = "";
+    }
+
+    if (!depChrono && value) {
+      setDepChrono(true);
+      setDepart(Date.now());
     }
 
     e.target.value = value;
@@ -64,7 +74,7 @@ export default function Grille({ langueClavier }: any) {
       let motEssai = recupMotLigne(ligne);
       //pouvoir valider seulement si on ecrit 5 lettres
       if (motEssai.length === colonnes) {
-        const comparaison = await motExistant(motEssai);
+        const comparaison = await motExistantFinal(motEssai);
 
         //affichage rouge quand mot n'existe pas
         if (!comparaison) {
@@ -93,6 +103,15 @@ export default function Grille({ langueClavier }: any) {
           if (ligneSuivante === lignes) {
             setTimeout(() => {
               setDefaite(true);
+              const tempsFin = Date.now();
+              setFin(tempsFin);
+
+              const nbTentatives = lignes; //car ligne start à 0
+              const duree = (tempsFin - depart) / 1000;
+              const score = ScoreTimer(depart, tempsFin, nbTentatives);
+              console.log(score);
+
+              envoyerScore(score, nbTentatives, duree, 0, secret);
             }, 500);
           }
           return ligneSuivante;
@@ -109,6 +128,11 @@ export default function Grille({ langueClavier }: any) {
 
     if (/^[A-Z]$/.test(key)) {
       input.value = key;
+
+      if (!depChrono) {
+        setDepChrono(true);
+        setDepart(Date.now());
+      }
 
       if (col < colonnes - 1) {
         focusCell(ligne, col + 1);
@@ -136,7 +160,7 @@ export default function Grille({ langueClavier }: any) {
       let motEssai = recupMotLigne(ligne);
       //pouvoir valider seulement si on ecrit 5 lettres
       if (motEssai.length === colonnes) {
-        const comparaison = await motExistant(motEssai);
+        const comparaison = await motExistantFinal(motEssai);
         if (!comparaison) {
           for (let c = 0; c < colonnes; c++) {
             const input = inputsRef.current.get(`${ligne}-${c}`);
@@ -162,6 +186,15 @@ export default function Grille({ langueClavier }: any) {
           if (ligneSuivante === lignes) {
             setTimeout(() => {
               setDefaite(true);
+              const tempsFin = Date.now();
+              setFin(tempsFin);
+
+              const nbTentatives = lignes; //car ligne start à 0
+              const duree = (tempsFin - depart) / 1000;
+              const score = ScoreTimer(depart, tempsFin, nbTentatives);
+              console.log(score);
+
+              envoyerScore(score, nbTentatives, duree, 0, secret);
             }, 500);
           }
           return ligneSuivante;
@@ -191,12 +224,17 @@ export default function Grille({ langueClavier }: any) {
     const keywordnik = import.meta.env.VITE_WORDNIK_KEY;
 
     const response = await fetch(
-      `https://api.wordnik.com/v4/words.json/randomWords?limit=1&minLength=5&maxLength=5&api_key=${keywordnik}`,
+      `https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minLength=5&maxLength=5&limit=1&api_key=${keywordnik}`,
     );
     const data = await response.json();
     const mot = data[0].word.toUpperCase();
 
-    if (mot.includes("'") || mot.includes("-") || mot.includes("ö")) {
+    if (
+      mot.includes("'") ||
+      mot.includes("-") ||
+      mot.includes("ö") ||
+      mot.includes(".")
+    ) {
       return motSecret();
     }
     return mot;
@@ -222,11 +260,54 @@ export default function Grille({ langueClavier }: any) {
     return mot;
   }
 
-  async function motExistant(mot: string) {
-    const verif = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${mot}`,
-    );
-    return verif.ok;
+  async function motExistantDico(mot: string) {
+    try {
+      const verif = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${mot.toLowerCase()}`,
+      );
+
+      if (!verif.ok) return false;
+
+      const data = await verif.json();
+
+      return (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        data.some((entry) => entry.word?.toUpperCase() === mot.toUpperCase())
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  async function motExistantWordnik(mot: string) {
+    try {
+      const apiWordnik = import.meta.env.VITE_WORDNIK_KEY;
+      const verif = await fetch(
+        `https://api.wordnik.com/v4/word.json/${mot.toLowerCase()}/definitions?limit=1&api_key=${apiWordnik}`,
+      );
+
+      if (!verif.ok) return false;
+
+      const data = await verif.json();
+
+      return (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        data.some((def) => def.word?.toUpperCase() === mot.toUpperCase())
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  async function motExistantFinal(mot: string) {
+    const [dicoOK, wordnikOK] = await Promise.all([
+      motExistantDico(mot),
+      motExistantWordnik(mot),
+    ]);
+
+    return dicoOK || wordnikOK;
   }
 
   function verifierResultat(mot: string, ligne: number) {
@@ -272,16 +353,38 @@ export default function Grille({ langueClavier }: any) {
     if (mot === secret) {
       setTimeout(() => {
         setVictoire(true);
+        const tempsFin = Date.now();
+        setFin(tempsFin);
+
+        const nbTentatives = ligne + 1; //car ligne start à 0
+        const duree = (tempsFin - depart) / 1000;
+        const score = ScoreTimer(depart, tempsFin, nbTentatives);
+        console.log(score);
+
+        envoyerScore(score, nbTentatives, duree, 1, mot);
       }, 500);
     }
   }
 
+  function ScoreTimer(depart: any, fin: any, nbTentatives: number) {
+    const duree = (fin - depart) / 1000; // en secondes
+
+    const scoreTemps = 1000 - duree * 5;
+    const scoreTentatives = 600 - nbTentatives * 100;
+
+    const scoreFinal = Math.max(0, scoreTemps + scoreTentatives);
+
+    return Math.floor(scoreFinal);
+  }
   //pour relancer une partie sans avoir à refresh la page entière
   function rejouer() {
     setVictoire(false);
     setDefaite(false);
     setLigneActive(0);
     setPresence({});
+    setDepart(null);
+    setFin(null);
+    setDepChrono(false);
 
     for (let input of inputsRef.current.values()) {
       //enleve les classlist de la partie précédente
@@ -295,6 +398,35 @@ export default function Grille({ langueClavier }: any) {
     //fetch un nouveau mot secret
     motSecret().then(setSecret);
   }
+
+  //envoi vers la bdd
+  async function envoyerScore(score, nbTentatives, duree, isWin, guess) {
+    try {
+      const loggedUser = JSON.parse(localStorage.getItem("user"));
+      console.log(loggedUser);
+
+      const response = await fetch("http://localhost:3000/api/stats", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          users_id: loggedUser.id, // à remplacer si tu as un vrai user
+          tentatives: nbTentatives,
+          duree: duree,
+          is_win: isWin,
+          guess: guess,
+          resultat: score,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Score enregistré :", data);
+    } catch (error) {
+      console.error("Erreur envoi score :", error);
+    }
+  }
+
   //affichage de la grille
   return (
     <div className="ligne">
