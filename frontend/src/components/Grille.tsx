@@ -400,7 +400,13 @@ export default function Grille({ langueClavier }: any) {
   }
 
   //envoi vers la bdd
-  async function envoyerScore(score, nbTentatives, duree, isWin, guess) {
+  async function envoyerScore(
+    score: number,
+    nbTentatives: number,
+    duree: any,
+    isWin: number,
+    guess: string,
+  ) {
     try {
       const loggedUser = JSON.parse(localStorage.getItem("user"));
       console.log(loggedUser);
