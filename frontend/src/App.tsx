@@ -1,9 +1,7 @@
 
 import { useState } from "react";
 import Jeu from "./components/Jeu";
-import Afficher from "./components/AfficherConnectInscr"
-import StatsScore from "./components/Scoreboard";
-
+import ConnectionOrInscription from "./components/AfficherConnectInscr"
 function App() {
 const [isConnected, setIsConnected] = useState(() => {
     return localStorage.getItem("user") !== null; // Renvoie true s'il y a un user, sinon false
@@ -14,13 +12,12 @@ const [isConnected, setIsConnected] = useState(() => {
     return(
       <>
       <Jeu />
-      <StatsScore/>
       </>
       )
     } else {
         return (
           <>
-            <Afficher setIsConnected={setIsConnected} />
+            <ConnectionOrInscription setIsConnected={setIsConnected} />
           </>
         )
       }  

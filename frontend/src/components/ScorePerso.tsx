@@ -1,23 +1,8 @@
-// import { useState } from "react";
-
-// export default function Scoreboard () {
-//     try {
-//         const reponse = await fetch (`http://localhost:3000/api/users/scoreboard/${id}` ,{
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//       if (!Response.ok) {
-//         throw new Error(`Erreur serveur : ${response.status}`);
-//       }
-// }
-
-
 import { useState, useEffect } from "react";
 
 // 1. Définir la structure d'une ligne de statistique (adapte selon tes colonnes de BDD)
 interface StatScore {
+  is_win : number;
   id: number;
   users_id: number;
   resultat: number;
@@ -25,20 +10,22 @@ interface StatScore {
   duree : number;
   guess : string;
 
-
   // Ajoute d'autres champs si tu en as (ex: date, niveau...)
 }
 
-export default function StatsScore() {
+export default function StatsScorePerso() {
   const [stats, setStats] = useState<StatScore[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const loggedUser = JSON.parse(localStorage.getItem("user"));
+
 
   // 2. useEffect pour charger les données au montage du composant
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/stats/high", {
+        const response = await fetch(`http://localhost:3000/api/stats/user/${loggedUser.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -75,7 +62,7 @@ export default function StatsScore() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
       <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
-        🏆 Tableau des Scores
+        🏆 Tableau des Scores Personnel
       </h2>
 
       {stats.length === 0 ? (
@@ -85,7 +72,7 @@ export default function StatsScore() {
           <table className="min-w-full table-auto border-collapse border border-gray-700 text-left text-sm">
             <thead className="bg-gray-800 text-indigo-300 uppercase text-xs tracking-wider">
               <tr>
-                <th className="p-3 border-b border-gray-700">ID Joueur</th>
+                <th className="p-3 border-b border-gray-700">Gagné</th>
                 <th className="p-3 border-b border-gray-700">Mot</th>
                 <th className="p-3 border-b border-gray-700">tentative</th>
                 <th className="p-3 border-b border-gray-700">durée</th>
@@ -95,7 +82,7 @@ export default function StatsScore() {
             <tbody className="divide-y divide-gray-800">
               {stats.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.users_id}</td>
+                  <td className="p-3 border-b border-gray-800 font-medium">{item.is_win}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.guess}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.tentatives}</td>
                   <td className="p-3 border-b border-gray-800 font-medium">{item.duree}</td>

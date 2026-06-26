@@ -8,7 +8,7 @@ interface ConnectedProps {
 }
 
 
-export default function Afficher({ setIsConnected }: ConnectedProps) {
+export default function ConnectionOrInscription({ setIsConnected }: ConnectedProps) {
   const [isConnection, setIsConnection] = useState(true)
 
   return(

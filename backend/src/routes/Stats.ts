@@ -26,10 +26,10 @@ router.get("/user/:users_id", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    const { users_id } = _req.params;
+    
+    const {users_id} = _req.params;
     const rows = await conn.query(
-      "SELECT * FROM stats_score WHERE users_id = ?",
-      [users_id],
+      "SELECT * FROM stats_score WHERE users_id = ?", [users_id]
     );
     [_req.params.users_id];
     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
@@ -46,9 +46,13 @@ router.get("/high", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
+<<<<<<< HEAD
+    const rows = await conn.query("SELECT * FROM stats_score ORDER BY resultat DESC");
+=======
     const rows = await conn.query(
       "SELECT * FROM stats_score ORDER BY resultat DESC",
     );
+>>>>>>> main
     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
     res.json(stats);
   } catch (err) {
@@ -58,6 +62,7 @@ router.get("/high", async (_req: Request, res: Response) => {
     if (conn) conn.release();
   }
 });
+
 
 router.post("/", async (_req: Request, res: Response) => {
   let conn;

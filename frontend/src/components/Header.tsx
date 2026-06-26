@@ -9,12 +9,14 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Parametre from "./Parametre";
+import Historique from "./Historique";
+import PopUpProfil from "./PopUpProfil";
 import { useState } from "react";
 import "./Header.css";
 
 const navigation = [
-  { name: "Jeu", href: "#", current: false },
-  { name: "Classement", href: "#", current: false },
+  { name: "Jeu", value: "jeu"},
+  { name: "Classement",value: "classement"},
 ];
 
 function classNames(...classes: any[]) {
@@ -26,8 +28,12 @@ export default function Header({
   setTheme,
   langueClavier,
   theme,
+  pageActuelle,      //l'onglet actuellement sélectionné ("jeu" ou "classement")
+  setPageActuelle,
 }: any) {
   const [openParametre, setOpenParametre] = useState(false);
+  const [openHistorique, setOpenHistorique] = useState(false);
+  const [openPopUpProfil, setOpenPopUpProfil] = useState(false);
 
   return (
     <Disclosure as="nav" className="header relative">
@@ -57,8 +63,11 @@ export default function Header({
                 {navigation.map((item) => (
                   <a
                     key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
+                    href="#"
+                    onClick={(e) => {
+                    e.preventDefault();
+                    setPageActuelle(item.value);
+                    }}
                   >
                     {item.name}
                   </a>
@@ -86,9 +95,19 @@ export default function Header({
                 <MenuItem>
                   <a
                     href="#"
+                    onClick={() => setOpenPopUpProfil(true)}
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Profil
+                  </a>
+                </MenuItem>
+                                <MenuItem>
+                  <a
+                    href="#"
+                    onClick={() => setOpenHistorique(true)}
+                    className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                  >
+                    Historique
                   </a>
                 </MenuItem>
                 <MenuItem>
@@ -102,6 +121,7 @@ export default function Header({
                 <MenuItem>
                   <a
                     href="#"
+                    onClick={Disconnect}
                     className="block px-4 py-2 text-sm text-red-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                   >
                     Déconnexion
@@ -119,9 +139,12 @@ export default function Header({
             <DisclosureButton
               key={item.name}
               as="a"
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              className="block rounded-md px-3 py-2 text-base font-medium"
+              href="#"
+              onClick={(e: any) => {
+                e.preventDefault();
+                setPageActuelle(item.value);
+              }}
+              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-700"
             >
               {item.name}
             </DisclosureButton>
@@ -137,6 +160,20 @@ export default function Header({
         langueClavier={langueClavier}
         theme={theme}
       />
+      <Historique
+        open={openHistorique}
+        setOpen={setOpenHistorique}
+        />
+      <PopUpProfil
+        open={openPopUpProfil}
+        setOpen={setOpenPopUpProfil}
+        />
     </Disclosure>
   );
 }
+
+function Disconnect() {
+  localStorage.clear();
+  window.location.reload(); 
+}
+

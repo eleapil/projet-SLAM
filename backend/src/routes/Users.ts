@@ -106,4 +106,52 @@ const saltRounds = 10;
   }
 });
 
+// PUT - modification des données user
+router.put("/update-profile", async (req: Request, res: Response) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const { id, email, pseudo, mdp } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "ID utilisateur manquant." });
+    }
+
+    // 1. Vérifier si le nouvel email est déjà utilisé par un AUTRE utilisateur
+    const existingUsers = await conn.query(
+      "SELECT id FROM users WHERE email = ? AND id != ?", 
+      [email, id]
+    );
+    if (existingUsers.length > 0) {
+      return res.status(409).json({ error: "Cette adresse email est déjà utilisée par un autre compte." });
+    }
+
+    // 2. Mettre à jour les infos en BDD
+    if (mdp) {
+      // Si l'utilisateur a tapé un nouveau mot de passe, on le hache avec bcrypt
+      const saltRounds = 10;
+      const hashedMdp = await bcrypt.hash(mdp, saltRounds);
+
+      await conn.query(
+        "UPDATE users SET email = ?, pseudo = ?, mdp = ? WHERE id = ?",
+        [email, pseudo, hashedMdp, id]
+      );
+    } else {
+      // Si le champ mdp est resté vide, on met à jour uniquement l'email et le pseudo
+      await conn.query(
+        "UPDATE users SET email = ?, pseudo = ? WHERE id = ?",
+        [email, pseudo, id]
+      );
+    }
+
+    res.json({ message: "Profil mis à jour avec succès !" });
+
+  } catch (err) {
+    console.error("Erreur bdd update-profile:", err);
+    res.status(500).json({ error: "Erreur serveur lors de la mise à jour." });
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
 export default router;
