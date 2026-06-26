@@ -22,12 +22,14 @@ router.get("/", async (_req: Request, res: Response) => {
 
 // GET /api/stats/:users_id -- les scores par son users_id
 
-router.get("/:users_id", async (_req: Request, res: Response) => {
+router.get("/user/:users_id", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
+    const { users_id } = _req.params;
     const rows = await conn.query(
       "SELECT * FROM stats_score WHERE users_id = ?",
+      [users_id],
     );
     [_req.params.users_id];
     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
@@ -40,14 +42,13 @@ router.get("/:users_id", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/:users_id/high", async (_req: Request, res: Response) => {
+router.get("/high", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
     const rows = await conn.query(
-      "SELECT * FROM stats_score WHERE users_id = ? ORDER BY resultat DESC",
+      "SELECT * FROM stats_score ORDER BY resultat DESC",
     );
-    [_req.params.users_id];
     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
     res.json(stats);
   } catch (err) {
@@ -62,12 +63,13 @@ router.post("/", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    const { tentatives, duree, is_win, guess, resultat } = _req.body;
+    const { users_id, tentatives, duree, is_win, guess, resultat } = _req.body;
 
     await conn.query(
-      `INSERT INTO stats_score( tentatives, duree, is_win, guess, resultat)
-      VALUES (?,?,?,?,?)`,
-      [tentatives, duree, is_win, guess, resultat],
+      `INSERT INTO stats_score
+   (users_id, tentatives, duree, is_win, guess, resultat)
+   VALUES (?, ?, ?, ?, ?, ?)`,
+      [users_id, tentatives, duree, is_win, guess, resultat],
     );
     [_req.params.users_id];
     res.status(201).json({ message: "Nouvelle stat" });

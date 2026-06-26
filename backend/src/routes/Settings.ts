@@ -4,7 +4,7 @@ import { Setting } from "../models/Setting";
 
 const router = Router();
 
-// GET /api/stats -- Liste de tous les settings
+// GET /api/settings -- Liste de tous les settings
 router.get("/", async (_req: Request, res: Response) => {
   let conn;
   try {
@@ -20,18 +20,47 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-router.post("/c", async (req: Request, res: Response) => {
+// GET /api/settings/:userId -- Settings d'un utilisateur précis
+router.get("/:userId", async (req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    const { theme } = req.body;
+    const { userId } = req.params;
+
+    const rows = await conn.query("SELECT * FROM settings WHERE users_id = ?", [
+      userId,
+    ]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Aucun settings trouvé" });
+    }
+
+    const setting = Setting.fromRow(rows[0]).toJSON();
+    res.json(setting);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
+router.post("/", async (req: Request, res: Response) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const { users_id, theme, clavier } = req.body;
 
     await conn.query(
-      `INSERT INTO settings( theme )
-      VALUES (?)`,
-      [theme],
+      `INSERT INTO settings (users_id, theme, clavier)
+   VALUES (?, ?, ?)
+   ON DUPLICATE KEY UPDATE
+   theme = VALUES(theme),
+   clavier = VALUES(clavier)`,
+      [users_id, theme, clavier],
     );
-    res.status(201).json({ message: "Nouveau settings" });
+
+    res.status(201).json({ message: "Nouveaux settings" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur serveur" });

@@ -22,7 +22,7 @@ export default function Defaite({ open, setOpen, mot, rejouer }) {
             ⟲ Rejouer
           </button>
           <button onClick={() => setOpen(false)} className="bouton1fermer">
-            ✖ Fermer
+            X Fermer
           </button>
         </DialogPanel>
       </div>
