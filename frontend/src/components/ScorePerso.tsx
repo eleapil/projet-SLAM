@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// 1. Définir la structure d'une ligne de statistique (adapte selon tes colonnes de BDD)
 interface StatScore {
   is_win : number;
   id: number;
@@ -9,8 +8,6 @@ interface StatScore {
   tentatives: number;
   duree : number;
   guess : string;
-
-  // Ajoute d'autres champs si tu en as (ex: date, niveau...)
 }
 
 export default function StatsScorePerso() {
@@ -37,7 +34,7 @@ export default function StatsScorePerso() {
         }
 
         const data = await response.json();
-        setStats(data); // On stocke le tableau reçu du backend
+        setStats(data); 
       } catch (error: any) {
         console.error("Erreur fetch stats:", error);
         setErrorMessage("Impossible de charger les statistiques.");
@@ -49,7 +46,6 @@ export default function StatsScorePerso() {
     fetchStats();
   }, []); // Le tableau vide [] signifie que l'effet s'exécute une seule fois au chargement
 
-  // 3. Affichages conditionnels (Chargement / Erreur)
   if (loading) {
     return <div className="text-center py-10 text-white">Chargement des scores...</div>;
   }
@@ -57,8 +53,7 @@ export default function StatsScorePerso() {
   if (errorMessage) {
     return <div className="text-center py-10 text-red-500">{errorMessage}</div>;
   }
-
-  // 4. Rendu des statistiques reçues
+  
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
       <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">

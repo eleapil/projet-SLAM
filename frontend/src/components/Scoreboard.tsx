@@ -1,22 +1,5 @@
-// import { useState } from "react";
-
-// export default function Scoreboard () {
-//     try {
-//         const reponse = await fetch (`http://localhost:3000/api/users/scoreboard/${id}` ,{
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//       if (!Response.ok) {
-//         throw new Error(`Erreur serveur : ${response.status}`);
-//       }
-// }
-
-
 import { useState, useEffect } from "react";
 
-// 1. Définir la structure d'une ligne de statistique (adapte selon tes colonnes de BDD)
 interface StatScore {
   id: number;
   pseudo: string;
@@ -24,9 +7,6 @@ interface StatScore {
   tentatives: number;
   duree : number;
   guess : string;
-
-
-  // Ajoute d'autres champs si tu en as (ex: date, niveau...)
 }
 
 export default function StatsScore() {
@@ -34,7 +14,7 @@ export default function StatsScore() {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // 2. useEffect pour charger les données au montage du composant
+  // useEffect pour charger les données au montage du composant
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -50,19 +30,18 @@ export default function StatsScore() {
         }
 
         const data = await response.json();
-        setStats(data); // On stocke le tableau reçu du backend
+        setStats(data);
       } catch (error: any) {
         console.error("Erreur fetch stats:", error);
         setErrorMessage("Impossible de charger les statistiques.");
       } finally {
-        setLoading(false); // Le chargement est terminé (succès ou échec)
+        setLoading(false);
       }
     };
 
     fetchStats();
   }, []); // Le tableau vide [] signifie que l'effet s'exécute une seule fois au chargement
 
-  // 3. Affichages conditionnels (Chargement / Erreur)
   if (loading) {
     return <div className="text-center py-10 text-white">Chargement des scores...</div>;
   }
@@ -71,7 +50,6 @@ export default function StatsScore() {
     return <div className="text-center py-10 text-red-500">{errorMessage}</div>;
   }
 
-  // 4. Rendu des statistiques reçues
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
       <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
