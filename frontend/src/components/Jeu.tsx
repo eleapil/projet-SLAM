@@ -11,6 +11,30 @@ function Jeu() {
 
   //console.log("langueClavier:", langueClavier);
 
+  // récupération des settings de l'utilisateur au montage (donc juste après connexion)
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const loggedUser = JSON.parse(localStorage.getItem("user"));
+        if (!loggedUser) return;
+
+        const response = await fetch(
+          `http://localhost:3000/api/settings/${loggedUser.id}`,
+        );
+
+        if (response.ok) {
+          const settings = await response.json();
+          if (settings.theme) setTheme(settings.theme);
+          if (settings.clavier) setLangueClavier(settings.clavier);
+        }
+      } catch (error) {
+        console.error("Erreur récupération settings :", error);
+      }
+    }
+
+    fetchSettings();
+  }, []);
+
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);

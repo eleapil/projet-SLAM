@@ -6,6 +6,27 @@ import {
 } from "@headlessui/react";
 import "./Parametre.css";
 
+async function envoyerSettings(theme: string, clavier: string) {
+  try {
+    const loggedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(loggedUser);
+
+    await fetch("http://localhost:3000/api/settings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        users_id: loggedUser.id,
+        theme: theme,
+        clavier: clavier,
+      }),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 //modal pour faire un pop up de paramètres
 export default function Parametre({
   open,
@@ -31,6 +52,7 @@ export default function Parametre({
             onClick={() => {
               setOpen(false);
               setLangueClavier("azerty");
+              envoyerSettings(theme, "azerty");
             }}
             className={`boutonAzerty ${langueClavier === "azerty" ? "actif" : ""}`}
           >
@@ -40,6 +62,7 @@ export default function Parametre({
             onClick={() => {
               setOpen(false);
               setLangueClavier("qwerty");
+              envoyerSettings(theme, "qwerty");
             }}
             className={`boutonQwerty ${langueClavier === "qwerty" ? "actif" : ""}`}
           >
@@ -50,6 +73,7 @@ export default function Parametre({
             onClick={() => {
               setOpen(false);
               setTheme("light");
+              envoyerSettings("light", langueClavier);
             }}
             className={`boutonLight ${theme === "light" ? "actif" : ""}`}
           >
@@ -59,6 +83,7 @@ export default function Parametre({
             onClick={() => {
               setOpen(false);
               setTheme("dark");
+              envoyerSettings("dark", langueClavier);
             }}
             className={`boutonDark ${theme === "dark" ? "actif" : ""}`}
           >
