@@ -53,7 +53,7 @@ export default function StatsScore() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
       <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
-        🏆 Tableau des Scores
+        Tableau des Scores
       </h2>
 
       {stats.length === 0 ? (

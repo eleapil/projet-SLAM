@@ -53,11 +53,11 @@ export default function StatsScorePerso() {
   if (errorMessage) {
     return <div className="text-center py-10 text-red-500">{errorMessage}</div>;
   }
-  
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
       <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
-        🏆 Tableau des Scores Personnel
+        Tableau des Scores Personnel
       </h2>
 
       {stats.length === 0 ? (
