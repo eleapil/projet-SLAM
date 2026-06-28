@@ -42,7 +42,7 @@ export default function Parametre({
       onClose={() => setOpen(false)}
       className="relative z-10"
     >
-      <DialogBackdrop className="fixed inset-0 bg-gray-500/75" />
+      <DialogBackdrop className="fixed inset-0 bg-gray-500/75 backdrop-blur-sm" />
 
       <div className="">
         <DialogPanel className="pannel w-[500px] h-[500px]">

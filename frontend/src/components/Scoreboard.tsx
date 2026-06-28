@@ -1,32 +1,14 @@
-// import { useState } from "react";
-
-// export default function Scoreboard () {
-//     try {
-//         const reponse = await fetch (`http://localhost:3000/api/users/scoreboard/${id}` ,{
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-//       if (!Response.ok) {
-//         throw new Error(`Erreur serveur : ${response.status}`);
-//       }
-// }
-
-
 import { useState, useEffect } from "react";
+import "./Scoreboard.css";
 
-// 1. Définir la structure d'une ligne de statistique (adapte selon tes colonnes de BDD)
+// 1. structure ligne stat
 interface StatScore {
   id: number;
   users_id: number;
   resultat: number;
   tentatives: number;
-  duree : number;
-  guess : string;
-
-
-  // Ajoute d'autres champs si tu en as (ex: date, niveau...)
+  duree: number;
+  guess: string;
 }
 
 export default function StatsScore() {
@@ -62,44 +44,42 @@ export default function StatsScore() {
     fetchStats();
   }, []); // Le tableau vide [] signifie que l'effet s'exécute une seule fois au chargement
 
-  // 3. Affichages conditionnels (Chargement / Erreur)
+  // 3.(Chargement / Erreur)
   if (loading) {
-    return <div className="text-center py-10 text-white">Chargement des scores...</div>;
+    return <div className="stats-loading">Chargement des scores...</div>;
   }
 
   if (errorMessage) {
-    return <div className="text-center py-10 text-red-500">{errorMessage}</div>;
+    return <div className="stats-error">{errorMessage}</div>;
   }
 
-  // 4. Rendu des statistiques reçues
+  // affichage stats
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
-      <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
-        🏆 Tableau des Scores
-      </h2>
+    <div className="stats-container">
+      <h2 className="stats-title">🏆 Tableau des Scores</h2>
 
       {stats.length === 0 ? (
-        <p className="text-center text-gray-400">Aucun score disponible pour le moment.</p>
+        <p className="stats-empty">Aucun score disponible pour le moment.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse border border-gray-700 text-left text-sm">
-            <thead className="bg-gray-800 text-indigo-300 uppercase text-xs tracking-wider">
+          <table className="stats-table">
+            <thead>
               <tr>
-                <th className="p-3 border-b border-gray-700">ID Joueur</th>
-                <th className="p-3 border-b border-gray-700">Mot</th>
-                <th className="p-3 border-b border-gray-700">tentative</th>
-                <th className="p-3 border-b border-gray-700">durée</th>
-                <th className="p-3 border-b border-gray-700 text-right">Score</th>
+                <th>ID Joueur</th>
+                <th>Mot</th>
+                <th>tentative</th>
+                <th>durée</th>
+                <th className="stats-cell-score">Score</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody>
               {stats.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.users_id}</td>
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.guess}</td>
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.tentatives}</td>
-                  <td className="p-3 border-b border-gray-800 font-medium">{item.duree}</td>
-                  <td className="p-3 border-b border-gray-800 text-right font-bold text-green-400">{item.resultat} pts</td>
+                <tr key={item.id}>
+                  <td>{item.users_id}</td>
+                  <td>{item.guess}</td>
+                  <td>{item.tentatives}</td>
+                  <td>{item.duree}</td>
+                  <td className="stats-cell-score">{item.resultat} pts</td>
                 </tr>
               ))}
             </tbody>
