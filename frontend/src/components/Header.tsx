@@ -82,9 +82,9 @@ export default function Header({
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">Open user menu</span>
                 <img
-                  alt=""
-                  src=""
-                  className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10 "
+                  alt="Profil"
+                  src="https://marketplace.canva.com/Wkt1s/MACg40Wkt1s/2/tl/canva-user-profile-icon-MACg40Wkt1s.png"
+                  className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
                 />
               </MenuButton>
 
