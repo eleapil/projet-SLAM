@@ -6,8 +6,8 @@ interface StatScore {
   pseudo: string;
   resultat: number;
   tentatives: number;
-  duree : number;
-  guess : string;
+  duree: number;
+  guess: string;
 }
 
 export default function StatsScore() {
@@ -52,10 +52,8 @@ export default function StatsScore() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
-      <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
-        Tableau des Scores
-      </h2>
+    <div className="stats-container">
+      <h2 className="stats-title">Tableau des Scores</h2>
 
       {stats.length === 0 ? (
         <p className="stats-empty">Aucun score disponible pour le moment.</p>
@@ -64,7 +62,7 @@ export default function StatsScore() {
           <table className="stats-table">
             <thead>
               <tr>
-                <th>ID Joueur</th>
+                <th>Joueur</th>
                 <th>Mot</th>
                 <th>tentative</th>
                 <th>durée</th>
@@ -74,10 +72,10 @@ export default function StatsScore() {
             <tbody>
               {stats.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.users_id}</td>
+                  <td>{item.pseudo}</td>
                   <td>{item.guess}</td>
                   <td>{item.tentatives}</td>
-                  <td>{item.duree}</td>
+                  <td>{item.duree} sec</td>
                   <td className="stats-cell-score">{item.resultat} pts</td>
                 </tr>
               ))}
