@@ -31,7 +31,7 @@ projet-SLAM/
 │       ├── models/           # Modèles de données (User, Setting, Stat_score)
 │       └── routes/           # Routes API (Users, Stats, Settings)
 ├── frontend/         # Interface — React / TypeScript / Tailwind CSS
-│   ├── public/       # Image de l'icon du jeu
+│   ├── public/       # Image de l'icône du jeu
 │   └── src/
 │       ├── App.tsx           # Composant racine
 │       └── components/       # Tous les composants React (Jeu, Grille, Clavier…)
