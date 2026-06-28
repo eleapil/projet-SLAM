@@ -92,6 +92,9 @@ Dans le dossier `backend`, créez un fichier `.env` pour la connexion à la base
 cd ../backend
 ```
 
+Se rendre sur le site [https://developer.wordnik.com/] pour se créer un compte afin de demander une clé API
+(Il s'agit de l'API utilisé pour récupérer des mots aléatoires)
+
 Créez le fichier `.env` avec le contenu suivant :
 
 ```env
@@ -100,6 +103,8 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=root
 DB_NAME=wordle_db
+
+VITE_WORDNIK_KEY=votre_clé_personnelle
 ```
 
 Installez les dépendances :
