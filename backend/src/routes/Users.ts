@@ -106,7 +106,7 @@ const saltRounds = 10;
   }
 });
 
-// PUT - modification des données user
+// PUT modification des données user
 router.put("/update-profile", async (req: Request, res: Response) => {
   let conn;
   try {
@@ -117,7 +117,7 @@ router.put("/update-profile", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "ID utilisateur manquant." });
     }
 
-    // 1. Vérifier si le nouvel email est déjà utilisé par un AUTRE utilisateur
+    // Vérifier si le nouvel email est déjà utilisé par un autre user
     const existingUsers = await conn.query(
       "SELECT id FROM users WHERE email = ? AND id != ?", 
       [email, id]
@@ -126,7 +126,7 @@ router.put("/update-profile", async (req: Request, res: Response) => {
       return res.status(409).json({ error: "Cette adresse email est déjà utilisée par un autre compte." });
     }
 
-    // 2. Mettre à jour les infos en BDD
+    // Mettre à jour les infos en BDD
     if (mdp) {
       // Si l'utilisateur a tapé un nouveau mot de passe, on le hache avec bcrypt
       const saltRounds = 10;

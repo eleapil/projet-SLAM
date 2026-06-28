@@ -4,7 +4,7 @@ import { Stat } from "../models/Stat_score";
 
 const router = Router();
 
-// GET /api/stats -- Liste de tous les scores
+// GET liste de tous les scores
 router.get("/", async (_req: Request, res: Response) => {
   let conn;
   try {
@@ -20,7 +20,7 @@ router.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-// GET /api/stats/:users_id -- les scores par son users_id
+// GET les scores par son users_id
 
 router.get("/user/:users_id", async (_req: Request, res: Response) => {
   let conn;
@@ -42,28 +42,13 @@ router.get("/user/:users_id", async (_req: Request, res: Response) => {
   }
 });
 
-// router.get("/high", async (_req: Request, res: Response) => {
-//   let conn;
-//   try {
-//     conn = await pool.getConnection();
-
-//     const rows = await conn.query("SELECT * FROM stats_score ORDER BY resultat DESC");
-
-//     const stats = rows.map((row: any) => Stat.fromRow(row).toJSON());
-//     res.json(stats);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Erreur serveur" });
-//   } finally {
-//     if (conn) conn.release();
-//   }
-// });
+// Get les scores trié par scrore décroissant
 router.get("/high", async (_req: Request, res: Response) => {
   let conn;
   try {
     conn = await pool.getConnection();
     
-    // Jointure stricte (INNER JOIN) pour lier le score à l'utilisateur
+    // Jointure (INNER JOIN) pour lier le score à l'utilisateur
     const query = `
       SELECT s.*, u.pseudo 
       FROM stats_score s

@@ -19,16 +19,12 @@ const navigation = [
   { name: "Classement",value: "classement"},
 ];
 
-function classNames(...classes: any[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Header({
   setLangueClavier,
   setTheme,
   langueClavier,
   theme,
-  pageActuelle,      //l'onglet actuellement sélectionné ("jeu" ou "classement")
+  //pageActuelle,      //l'onglet actuellement sélectionné ("jeu" ou "classement")
   setPageActuelle,
 }: any) {
   const [openParametre, setOpenParametre] = useState(false);
