@@ -1,10 +1,38 @@
+:root,
+body.light {
+  --param-bg: #ffffff;
+  --param-text: #374151;
+  --param-titre: #9ca3af;
+  --param-bouton-bg: #f3f4f6;
+  --param-bouton-text: #374151;
+  --param-bouton-hover: #e5e7eb;
+  --param-separateur: #f0f0f0;
+  --param-fermer-bg: #fef2f2;
+  --param-fermer-text: #dc2626;
+  --param-fermer-hover: #fee2e2;
+}
+
+body.dark {
+  --param-bg: #1f2937;
+  --param-text: #e5e7eb;
+  --param-titre: #9ca3af;
+  --param-bouton-bg: #374151;
+  --param-bouton-text: #e5e7eb;
+  --param-bouton-hover: #4b5563;
+  --param-separateur: #374151;
+  --param-fermer-bg: rgba(127, 29, 29, 0.4);
+  --param-fermer-text: #f87171;
+  --param-fermer-hover: rgba(127, 29, 29, 0.6);
+}
+
 .pannel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
-  background-color: #ffffff;
+  background-color: var(--param-bg);
+  color: var(--param-text);
   border-radius: 20px;
   padding: 24px;
   width: 320px;
@@ -38,7 +66,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: var(--param-titre);
   margin-bottom: 14px;
   text-align: left;
 }
@@ -62,8 +90,8 @@
   gap: 6px;
   margin: 10px;
 
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: var(--param-bouton-bg);
+  color: var(--param-bouton-text);
 
   border: 1.5px solid transparent;
   border-radius: 12px;
@@ -79,7 +107,7 @@
 .boutonQwerty:hover,
 .boutonLight:hover,
 .boutonDark:hover {
-  background-color: #e5e7eb;
+  background-color: var(--param-bouton-hover);
   transform: translateY(-1px);
 }
 
@@ -105,13 +133,14 @@
 
 .boutonDark.actif {
   background-color: #1f2937;
-  border-color: #1f2937;
+  border-color: #6366f1;
   color: white;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 
 .separateur {
   border: none;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--param-separateur);
   margin: 18px 0 16px;
 }
 
@@ -124,8 +153,8 @@
   box-sizing: border-box;
   margin-top: 30px;
 
-  background-color: #fef2f2;
-  color: #dc2626;
+  background-color: var(--param-fermer-bg);
+  color: var(--param-fermer-text);
 
   border: none;
   border-radius: 12px;
@@ -138,5 +167,5 @@
 }
 
 .boutonFermer:hover {
-  background-color: #fee2e2;
+  background-color: var(--param-fermer-hover);
 }
