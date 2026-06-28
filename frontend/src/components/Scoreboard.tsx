@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import "./Scoreboard.css";
 
-// 1. structure ligne stat
 interface StatScore {
   id: number;
-  users_id: number;
+  pseudo: string;
   resultat: number;
   tentatives: number;
-  duree: number;
-  guess: string;
+  duree : number;
+  guess : string;
 }
 
 export default function StatsScore() {
@@ -16,7 +15,7 @@ export default function StatsScore() {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // 2. useEffect pour charger les données au montage du composant
+  // useEffect pour charger les données au montage du composant
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -32,19 +31,18 @@ export default function StatsScore() {
         }
 
         const data = await response.json();
-        setStats(data); // On stocke le tableau reçu du backend
+        setStats(data);
       } catch (error: any) {
         console.error("Erreur fetch stats:", error);
         setErrorMessage("Impossible de charger les statistiques.");
       } finally {
-        setLoading(false); // Le chargement est terminé (succès ou échec)
+        setLoading(false);
       }
     };
 
     fetchStats();
   }, []); // Le tableau vide [] signifie que l'effet s'exécute une seule fois au chargement
 
-  // 3.(Chargement / Erreur)
   if (loading) {
     return <div className="stats-loading">Chargement des scores...</div>;
   }
@@ -53,10 +51,11 @@ export default function StatsScore() {
     return <div className="stats-error">{errorMessage}</div>;
   }
 
-  // affichage stats
   return (
-    <div className="stats-container">
-      <h2 className="stats-title">🏆 Tableau des Scores</h2>
+    <div className="mx-auto max-w-4xl px-4 py-8 bg-gray-900 rounded-lg shadow-md text-white mt-5">
+      <h2 className="text-2xl font-bold tracking-tight text-indigo-400 mb-6 text-center">
+        Tableau des Scores
+      </h2>
 
       {stats.length === 0 ? (
         <p className="stats-empty">Aucun score disponible pour le moment.</p>
