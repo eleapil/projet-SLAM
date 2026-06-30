@@ -69,7 +69,7 @@ export default function StatsScorePerso() {
               <tr>
                 <th>Gagné</th>
                 <th>Mot</th>
-                <th>tentative</th>
+                <th>tentatives</th>
                 <th>durée</th>
                 <th className="hist-cell-score">Score</th>
               </tr>
@@ -80,7 +80,7 @@ export default function StatsScorePerso() {
                   <td>{item.is_win}</td>
                   <td>{item.guess}</td>
                   <td>{item.tentatives}</td>
-                  <td>{item.duree}</td>
+                  <td>{item.duree} sec</td>
                   <td className="hist-cell-score">{item.resultat} pts</td>
                 </tr>
               ))}
