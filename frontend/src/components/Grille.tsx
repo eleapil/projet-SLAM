@@ -65,6 +65,12 @@ export default function Grille({ langueClavier }: any) {
     focusCell(ligneActive, 0);
   }, [ligneActive]);
 
+  useEffect(() => {
+    if (!chargement) {
+      focusCell(ligneActive, 0);
+    }
+  }, [chargement]);
+
   const handleKeyDown = (ligne: number, col: number) => async (e: any) => {
     //touche "supp"
     if (e.key === "Backspace" && !e.target.value && col > 0) {
