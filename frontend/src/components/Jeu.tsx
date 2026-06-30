@@ -40,7 +40,7 @@ function Jeu() {
   }, [theme]);
 
   return (
-    <>
+    <div className="app-shell">
       <div>
         <Header
           setLangueClavier={setLangueClavier}
@@ -51,17 +51,15 @@ function Jeu() {
           setPageActuelle={setPageActuelle}
         />
       </div>
-      <main className="container mx-auto px-4 py-6">  
+      <main className="container mx-auto px-4 py-6">
         {pageActuelle === "jeu" ? (
           <Grille langueClavier={langueClavier} />
         ) : (
           <StatsScore />
         )}
       </main>
-      <div>
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 export default Jeu;
