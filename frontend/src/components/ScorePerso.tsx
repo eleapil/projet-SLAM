@@ -67,10 +67,10 @@ export default function StatsScorePerso() {
           <table className="hist-table">
             <thead>
               <tr>
-                <th>Gagné</th>
+                <th>Statut</th>
                 <th>Mot</th>
-                <th>tentatives</th>
-                <th>durée</th>
+                <th>Tentatives</th>
+                <th>Durée</th>
                 <th className="hist-cell-score">Score</th>
               </tr>
             </thead>
