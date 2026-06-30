@@ -55,7 +55,7 @@ export default function StatsScorePerso() {
   if (errorMessage) {
     return <div className="hist-error">{errorMessage}</div>;
   }
-
+  
   return (
     <div className="hist-container">
       <h2 className="hist-title">Tableau des Scores Personnel</h2>
@@ -77,7 +77,7 @@ export default function StatsScorePerso() {
             <tbody>
               {stats.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.is_win}</td>
+                  <td>{item.is_win === 1 ? "Gagné" : "Perdu"}</td>
                   <td>{item.guess}</td>
                   <td>{item.tentatives}</td>
                   <td>{item.duree} sec</td>
