@@ -89,28 +89,18 @@ Cela démarre :
 
 Dans le dossier `backend`, créez un fichier `.env` pour la connexion à la base de données :
 
-```bash
-cd ../backend
-```
-
-Se rendre sur le site [https://developer.wordnik.com/] pour se créer un compte afin de demander une clé API
-(Il s'agit de l'API utilisé pour récupérer des mots aléatoires)
-
-Créez le fichier `.env` avec le contenu suivant :
-
 ```env
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=root
 DB_NAME=wordle_db
-
-VITE_WORDNIK_KEY=votre_clé_personnelle
 ```
 
 Installez les dépendances :
 
 ```bash
+cd ../backend
 npm install
 ```
 
@@ -122,7 +112,16 @@ npx tsx src/server.ts
 
 Le serveur est accessible sur [http://localhost:3000].
 
-### Étape 4 — Lancer le frontend
+### Étape 4 — Configurer le frontend
+
+Se rendre sur le site [https://developer.wordnik.com/] pour se créer un compte afin de demander une clé API
+(Il s'agit de l'API utilisé pour récupérer des mots aléatoires)
+
+Dans le dossier `frontend`, créez un fichier `.env` :
+
+```env
+VITE_WORDNIK_KEY=<votre_clé_personnelle>
+```
 
 Ouvrez un nouveau terminal, puis depuis le dossier `frontend` :
 

@@ -6,9 +6,9 @@ export default function Footer() {
       <p>2026 Eléa Pilliod - Lucas Marchasson</p>
 
       <div className="footer-links">
-        <a href="#">À propos</a>
+        <a href="https://github.com/eleapil/projet-SLAM/blob/main/README.md" target="_blank">À propos</a>
         <div className="separator"></div>
-        <a href="https://github.com/eleapil/projet-SLAM">GitHub</a>
+        <a href="https://github.com/eleapil/projet-SLAM" target="_blank">GitHub</a>
       </div>
     </footer>
   );
