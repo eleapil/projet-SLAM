@@ -225,7 +225,6 @@ export default function Grille({ langueClavier }: any) {
   //api sur wordnik.com => Demander une clé pour pouvoir l'utiliser
   async function motSecret() {
     const keywordnik = import.meta.env.VITE_WORDNIK_KEY;
-    console.log(`aaaaaaaaaa ${keywordnik}`)
 
     const response = await fetch(
       `https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minLength=5&maxLength=5&limit=1&api_key=${keywordnik}`,
