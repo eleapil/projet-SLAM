@@ -17,6 +17,8 @@ export default function Grille({ langueClavier }: any) {
   const [colonneActive, setColonneActive] = useState(0);
   const [presence, setPresence] = useState({}); //juste, mvPlacement absent
 
+  const [chargement, setChargement] = useState(true); //pour bloquer les input pdt le fetch d'un mot
+
   //states pour timer du jeu
   const [depart, setDepart] = useState(null);
   const [fin, setFin] = useState(null);
@@ -74,7 +76,7 @@ export default function Grille({ langueClavier }: any) {
       let motEssai = recupMotLigne(ligne);
       //pouvoir valider seulement si on ecrit 5 lettres
       if (motEssai.length === colonnes) {
-        const comparaison = await motExistantFinal(motEssai);
+        const comparaison = await motExistantDico(motEssai);
 
         //affichage rouge quand mot n'existe pas
         if (!comparaison) {
@@ -109,7 +111,7 @@ export default function Grille({ langueClavier }: any) {
               const nbTentatives = lignes; //car ligne start à 0
               const duree = (tempsFin - depart) / 1000;
               const score = ScoreTimer(depart, tempsFin, nbTentatives);
-              console.log(score);
+              //console.log("Score :", score);
 
               envoyerScore(score, nbTentatives, duree, 0, secret);
             }, 500);
@@ -124,6 +126,8 @@ export default function Grille({ langueClavier }: any) {
 
   //clavier virtuel
   const handleKeyVirt = async (key: string, ligne: number, col: number) => {
+    if (chargement) return; //empêche d'écrire pendant le fetch du mot secret
+
     const input = inputsRef.current.get(`${ligne}-${col}`);
 
     if (/^[A-Z]$/.test(key)) {
@@ -160,7 +164,7 @@ export default function Grille({ langueClavier }: any) {
       let motEssai = recupMotLigne(ligne);
       //pouvoir valider seulement si on ecrit 5 lettres
       if (motEssai.length === colonnes) {
-        const comparaison = await motExistantFinal(motEssai);
+        const comparaison = await motExistantDico(motEssai);
         if (!comparaison) {
           for (let c = 0; c < colonnes; c++) {
             const input = inputsRef.current.get(`${ligne}-${c}`);
@@ -192,7 +196,6 @@ export default function Grille({ langueClavier }: any) {
               const nbTentatives = lignes; //car ligne start à 0
               const duree = (tempsFin - depart) / 1000;
               const score = ScoreTimer(depart, tempsFin, nbTentatives);
-              console.log(score);
 
               envoyerScore(score, nbTentatives, duree, 0, secret);
             }, 500);
@@ -233,16 +236,29 @@ export default function Grille({ langueClavier }: any) {
       mot.includes("'") ||
       mot.includes("-") ||
       mot.includes("ö") ||
-      mot.includes(".")
+      mot.includes(".") ||
+      mot.includes(" ")
     ) {
       return motSecret();
     }
+
+    //on vérifie que le mot a bien une définition dans dictionaryapi.dev
+    //sinon on relance un fetch pour un nouveau mot
+    const existeDansDico = await motExistantDico(mot);
+    if (!existeDansDico) {
+      return motSecret();
+    }
+
     return mot;
   }
 
   const [secret, setSecret] = useState("");
   useEffect(() => {
-    motSecret().then(setSecret);
+    setChargement(true);
+    motSecret().then((mot) => {
+      setSecret(mot);
+      setChargement(false);
+    });
   }, []);
 
   // juste pour afficher le mot à toruver dans la console pour vérifier que tout fonctionne
@@ -278,36 +294,6 @@ export default function Grille({ langueClavier }: any) {
     } catch {
       return false;
     }
-  }
-
-  async function motExistantWordnik(mot: string) {
-    try {
-      const apiWordnik = import.meta.env.VITE_WORDNIK_KEY;
-      const verif = await fetch(
-        `https://api.wordnik.com/v4/word.json/${mot.toLowerCase()}/definitions?limit=1&api_key=${apiWordnik}`,
-      );
-
-      if (!verif.ok) return false;
-
-      const data = await verif.json();
-
-      return (
-        Array.isArray(data) &&
-        data.length > 0 &&
-        data.some((def) => def.word?.toUpperCase() === mot.toUpperCase())
-      );
-    } catch {
-      return false;
-    }
-  }
-
-  async function motExistantFinal(mot: string) {
-    const [dicoOK, wordnikOK] = await Promise.all([
-      motExistantDico(mot),
-      motExistantWordnik(mot),
-    ]);
-
-    return dicoOK || wordnikOK;
   }
 
   function verifierResultat(mot: string, ligne: number) {
@@ -359,7 +345,7 @@ export default function Grille({ langueClavier }: any) {
         const nbTentatives = ligne + 1; //car ligne start à 0
         const duree = (tempsFin - depart) / 1000;
         const score = ScoreTimer(depart, tempsFin, nbTentatives);
-        console.log(score);
+        //console.log(score);
 
         envoyerScore(score, nbTentatives, duree, 1, mot);
       }, 500);
@@ -396,7 +382,11 @@ export default function Grille({ langueClavier }: any) {
     //remet le focus a la premiere case
     focusCell(0, 0);
     //fetch un nouveau mot secret
-    motSecret().then(setSecret);
+    setChargement(true);
+    motSecret().then((mot) => {
+      setSecret(mot);
+      setChargement(false);
+    });
   }
 
   //envoi vers la bdd
@@ -409,7 +399,7 @@ export default function Grille({ langueClavier }: any) {
   ) {
     try {
       const loggedUser = JSON.parse(localStorage.getItem("user"));
-      console.log(loggedUser);
+      //console.log(loggedUser);
 
       const response = await fetch("http://localhost:3000/api/stats", {
         method: "POST",
@@ -462,7 +452,7 @@ export default function Grille({ langueClavier }: any) {
               key={`${ligne}-${col}`}
               ref={setRef(ligne, col)}
               maxLength={1}
-              disabled={ligne !== ligneActive}
+              disabled={ligne !== ligneActive || chargement}
               onChange={handleChange(ligne, col)}
               onKeyDown={handleKeyDown(ligne, col)}
             />
