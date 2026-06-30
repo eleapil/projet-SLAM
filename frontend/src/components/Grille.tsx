@@ -19,6 +19,7 @@ export default function Grille({ langueClavier }: any) {
 
   const [chargement, setChargement] = useState(true); //pour bloquer les input pdt le fetch d'un mot
 
+  const scoreEnvoye = useRef(false);
   //states pour timer du jeu
   const [depart, setDepart] = useState(null);
   const [fin, setFin] = useState(null);
@@ -110,6 +111,9 @@ export default function Grille({ langueClavier }: any) {
           //si on arrive à la derniere ligne => defaite
           if (ligneSuivante === lignes) {
             setTimeout(() => {
+              if (scoreEnvoye.current) return; // déjà envoyé, on stop
+              scoreEnvoye.current = true;
+
               setDefaite(true);
               const tempsFin = Date.now();
               setFin(tempsFin);
@@ -344,6 +348,9 @@ export default function Grille({ langueClavier }: any) {
     //réponse trouvé
     if (mot === secret) {
       setTimeout(() => {
+        if (scoreEnvoye.current) return;
+        scoreEnvoye.current = true;
+
         setVictoire(true);
         const tempsFin = Date.now();
         setFin(tempsFin);
@@ -355,6 +362,7 @@ export default function Grille({ langueClavier }: any) {
 
         envoyerScore(score, nbTentatives, duree, 1, mot);
       }, 500);
+      setChargement(true);
     }
   }
 
@@ -377,6 +385,7 @@ export default function Grille({ langueClavier }: any) {
     setDepart(null);
     setFin(null);
     setDepChrono(false);
+    scoreEnvoye.current = false;
 
     for (let input of inputsRef.current.values()) {
       //enleve les classlist de la partie précédente
