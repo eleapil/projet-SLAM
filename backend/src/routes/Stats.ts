@@ -53,7 +53,7 @@ router.get("/high", async (_req: Request, res: Response) => {
       SELECT s.*, u.pseudo 
       FROM stats_score s
       INNER JOIN users u ON s.users_id = u.id
-      ORDER BY s.resultat DESC LIMIT 15
+      ORDER BY s.resultat DESC
     `;
     
     const rows = await conn.query(query);

@@ -99,3 +99,21 @@ body.dark {
   padding: 2.5rem 0;
   color: #ef4444;
 }
+
+.overflow-x-auto {
+  overflow-x: auto;   /* Conserve le scroll horizontal si l'écran est petit */
+  overflow-y: auto;   /* Active le scroll vertical pour les longues listes de scores */
+  
+  max-height: 400px;  /* Fixe la hauteur maximale de la zone de scores */
+  
+  border: 1px solid var(--hist-border); /* Utilise votre variable de bordure existante */
+  border-radius: 0.375rem;              /* Arrondit un peu les coins du tableau */
+  margin-bottom: 1rem;
+}
+
+.hist-table th {
+  position: sticky;
+  top: 0;
+  background-color: var(--hist-thead-bg); /* Empêche les scores de passer "par-dessus" le texte de l'entête */
+  z-index: 1;
+}
